@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercício 2 - Cards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            padding: 2rem;
+            background: #f0f4f8;
+        }
+        
+        .cards-container {
+            /* ★ USE FLEXBOX AQUI ★ */
+            /* Deixe os cards lado a lado com espaçamento */
+            display: flex;
+            gap: 2rem;
+            
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 250px;
+            text-align: center;
+        }
+        
+        .card h3 {
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card p {
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="cards-container">
+        <div class="card">
+            <h3>📚 Curso 1</h3>
+            <p>Aprenda HTML do zero</p>
+        </div>
+        <div class="card">
+            <h3>🎨 Curso 2</h3>
+            <p>Domine CSS e design</p>
+        </div>
+        <div class="card">
+            <h3>⚡ Curso 3</h3>
+            <p>JavaScript para iniciantes</p>
+        </div>
+    </div>
+</body>
+</html>

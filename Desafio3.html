@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercício 3 - Perfil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            padding: 2rem;
+            background: #f0f4f8;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .profile-card {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            
+            /* ★ USE FLEXBOX ★ */
+            
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .profile-info {
+            /* ★ INFORMAÇÕES DO PERFIL ★ */
+        }
+        
+        .profile-info h2 {
+            color: #1e293b;
+        }
+        
+        .profile-info p {
+            color: #475569;
+        }
+        
+        .profile-stats {
+            /* ★ ESTATÍSTICAS EM FLEX ★ */
+            margin-top: 1rem;
+            display: flex;
+            gap: 2rem;
+            justify-content: space-around;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6366f1;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <div class="profile-avatar">👤</div>
+        <div class="profile-info">
+            <h2>João Silva</h2>
+            <p>Desenvolvedor Front-End</p>
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-number">150</div>
+                    <div class="stat-label">Seguidores</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">42</div>
+                    <div class="stat-label">Projetos</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Prêmios</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
