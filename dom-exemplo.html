@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manipulação de DOM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 2rem;
+            background: #f0f4f8;
+        }
+
+         .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #6366f1;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #4f46e5;
+        }
+        
+        .lista {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .lista li {
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #6366f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .lista li button {
+            padding: 0.25rem 0.75rem;
+            background: #ef4444;
+            font-size: 0.75rem;
+        }
+        
+        .lista li button:hover {
+            background: #dc2626;
+        }
+        
+        .contador {
+            margin-top: 1rem;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+        </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Lista de Tarefas</h1>
+        
+        <div class="input-group">
+            <input type="text" id="tarefaInput" placeholder="Digite uma tarefa...">
+            <button id="adicionarBtn">Adicionar</button>
+        </div>
+        
+        <ul class="lista" id="listaTarefas">
+            <!-- Itens serão adicionados aqui via JavaScript -->
+        </ul>
+        
+        <div class="contador">
+            Total de tarefas: <span id="contadorTarefas">0</span>
+        </div>
+    </div>
+
+    <script>
+        
+        // 1. Pegar elementos do DOM
+        const inputTarefa = document.getElementById('tarefaInput');
+        const btnAdicionar = document.getElementById('adicionarBtn');
+        const listaTarefas = document.getElementById('listaTarefas');
+        const contadorTarefas = document.getElementById('contadorTarefas');
+        
+        // 2. Array para armazenar as tarefas
+        let tarefas = [];
+        
+        // 3. Função para renderizar a lista
+        const renderizarTarefas = () => {
+            // Limpar lista
+            listaTarefas.innerHTML = '';
+            
+            // Para cada tarefa, criar um item <li>
+            tarefas.forEach((tarefa, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${tarefa}</span>
+                    <button onclick="removerTarefa(${index})">❌</button>
+                `;
+                listaTarefas.appendChild(li);
+            });
+            
+            // Atualizar contador
+            contadorTarefas.textContent = tarefas.length;
+        };
+        
+        // 4. Função para adicionar tarefa
+        const adicionarTarefa = () => {
+            const texto = inputTarefa.value.trim();
+            
+            // Validação: não pode estar vazio
+            if (texto === '') {
+                alert('Digite uma tarefa!');
+                return;
+            }
+            
+            // Adicionar ao array
+            tarefas.push(texto);
+            
+            // Limpar input
+            inputTarefa.value = '';
+            
+            // Focar no input
+            inputTarefa.focus();
+            
+            // Renderizar novamente
+            renderizarTarefas();
+        };
+        
+        // 5. Função para remover tarefa
+        const removerTarefa = (index) => {
+            // Remover do array
+            tarefas.splice(index, 1);
+            
+            // Renderizar novamente
+            renderizarTarefas();
+        };
+        
+        // 6. Adicionar evento ao botão
+        btnAdicionar.addEventListener('click', adicionarTarefa);
+        
+        // 7. Adicionar evento ao input (tecla Enter)
+        inputTarefa.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                adicionarTarefa();
+            }
+        });
+        
+        // 8. Adicionar tarefas exemplo
+        tarefas = ['Aprender HTML', 'Estudar CSS', 'Praticar JavaScript'];
+        renderizarTarefas();
+    </script>
+</body>
+</html>

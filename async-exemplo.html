@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async/Await</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 2rem;
+            background: #f0f4f8;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #6366f1;
+            margin-bottom: 1.5rem;
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+        
+        button:hover {
+            background: #4f46e5;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .resultado {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #6366f1;
+            min-height: 60px;
+        }
+        
+        .loading {
+            color: #6366f1;
+            font-weight: 600;
+        }
+        
+        .erro {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        .sucesso {
+            color: #22c55e;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⏳ Dados Assíncronos</h1>
+        
+        <button id="buscarBtn">Buscar Usuários</button>
+        <button id="simularErroBtn">Simular Erro</button>
+        
+        <div class="resultado" id="resultado">
+            <span style="color: #94a3b8;">Aguardando ação...</span>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // 1. SIMULAR API (dados falsos)
+        // ============================================
+        const usuariosFalsos = [
+            { id: 1, nome: "João Silva", email: "joao@email.com" },
+            { id: 2, nome: "Maria Santos", email: "maria@email.com" },
+            { id: 3, nome: "Pedro Costa", email: "pedro@email.com" },
+        ];
+        
+        // ============================================
+        // 2. PROMISE (simulando requisição)
+        // ============================================
+        const buscarUsuarios = () => {
+            return new Promise((resolve, reject) => {
+                // Simular atraso de rede (1.5 segundos)
+                setTimeout(() => {
+                    // 90% de chance de sucesso, 10% de erro
+                    const sucesso = Math.random() > 0.1;
+                    
+                    if (sucesso) {
+                        resolve(usuariosFalsos);
+                    } else {
+                        reject(new Error("Erro ao buscar usuários!"));
+                    }
+                }, 1500);
+            });
+        };
+        
+        // ============================================
+        // 3. FUNÇÃO COM ASYNC/AWAIT
+        // ============================================
+        const resultado = document.getElementById('resultado');
+        const buscarBtn = document.getElementById('buscarBtn');
+        const simularErroBtn = document.getElementById('simularErroBtn');
+        
+        // Função principal
+        const buscarUsuariosAsync = async () => {
+            try {
+                // Desabilitar botão enquanto carrega
+                buscarBtn.disabled = true;
+                simularErroBtn.disabled = true;
+                
+                // Mostrar loading
+                resultado.innerHTML = `
+                    <div class="loading">⏳ Carregando usuários...</div>
+                `;
+                
+                // ★ AWAIT - Espera a Promise resolver ★
+                const usuarios = await buscarUsuarios();
+                
+                // Mostrar resultado
+                resultado.innerHTML = `
+                    <div class="sucesso">✅ Usuários carregados com sucesso!</div>
+                    <ul style="margin-top: 0.5rem; list-style: none;">
+                        ${usuarios.map(user => `
+                            <li style="padding: 0.5rem; background: white; margin-bottom: 0.25rem; border-radius: 4px;">
+                                <strong>${user.nome}</strong> - ${user.email}
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                
+            } catch (error) {
+                // ★ CAPTURA O ERRO ★
+                resultado.innerHTML = `
+                    <div class="erro">❌ ${error.message}</div>
+                    <div style="margin-top: 0.5rem; color: #94a3b8;">
+                        Tente novamente em alguns segundos.
+                    </div>
+                `;
+            } finally {
+                // Habilitar botões
+                buscarBtn.disabled = false;
+                simularErroBtn.disabled = false;
+            }
+        };
+        
+        // ============================================
+        // 4. FUNÇÃO PARA SIMULAR ERRO
+        // ============================================
+        const simularErro = () => {
+            // Forçar erro na próxima requisição
+            const originalBuscar = buscarUsuarios;
+            
+            // Sobrescrever temporariamente
+            window.buscarUsuarios = () => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        reject(new Error("Erro forçado pelo usuário!"));
+                    }, 1000);
+                });
+            };
+            
+            // Chamar a função
+            buscarUsuariosAsync();
+            
+            // Restaurar após 2 segundos
+            setTimeout(() => {
+                window.buscarUsuarios = originalBuscar;
+            }, 2000);
+        };
+        
+        // ============================================
+        // 5. ADICIONAR EVENTOS
+        // ============================================
+        buscarBtn.addEventListener('click', buscarUsuariosAsync);
+        simularErroBtn.addEventListener('click', simularErro);
+        
+        // ============================================
+        // 6. CARREGAR AUTOMATICAMENTE AO ABRIR
+        // ============================================
+        // Descomente para carregar automaticamente:
+        // buscarUsuariosAsync();
+    </script>
+</body>
+</html>
